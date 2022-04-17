@@ -1,8 +1,7 @@
 var mysql = require('mysql');
 
-const dotenv = require('secrets.env').config();
-
-var con = mysql.createPool({
+const dotenv = require('dotenv').config({path: 'secrets.env'});
+var con = mysql.createConnection({
 
   connectionLimit : process.env.DB_CONLIMIT,
   host            : process.env.DB_HOST,
@@ -13,7 +12,7 @@ var con = mysql.createPool({
 
 con.connect(function(err) {
   if (err) throw err;
-  con.query("SELECT * FROM kviz", function (err, result, fields) {
+  con.query("select * from Odgovor", function (err, result, fields) {
     if (err) throw err;
     console.log(result);
   });
