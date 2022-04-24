@@ -15,7 +15,7 @@ var con = mysql.createConnection({
 app.get('/kviz/:id',(req,res) =>{
     const {id} = req.params;
     con.query(`select * from Kviz WHERE idKviza = ${id}`, function (err, kviz, fields) {
-        if (err) throw err;
+        if (err) res.sendStatus(500)
         console.log(kviz)
         res.send({
             kviz
@@ -26,7 +26,7 @@ app.get('/kviz/:id',(req,res) =>{
 app.get('/pitanja/:idKviza',(req,res) =>{
     const {idKviza} = req.params;
     con.query(`select * from Pitanje WHERE idKviza = ${idKviza}`, function (err, pitanja, fields) {
-        if (err) throw err;
+        if (err) res.sendStatus(500)
         console.log(pitanja)
         res.send({
             pitanja
@@ -37,7 +37,7 @@ app.get('/pitanja/:idKviza',(req,res) =>{
 app.get('/odgovori/:idPitanja',(req,res) =>{
     const {idPitanja} = req.params;
     con.query(`select * from Odgovor WHERE idPitanja = ${idPitanja}`, function (err, odgovori, fields) {
-        if (err) throw err;
+        if (err) res.sendStatus(500)
         console.log(odgovori)
         res.send({
             odgovori
@@ -48,7 +48,7 @@ app.get('/odgovori/:idPitanja',(req,res) =>{
 app.get('/korisnikKvizovi/:idKreatora',(req,res) =>{
     const {idKreatora} = req.params;
     con.query(`select * from Kviz WHERE idKreatora = ${idKreatora}`, function (err, kvizovi, fields) {
-        if (err) throw err;
+        if (err) res.sendStatus(500)
         console.log(kvizovi)
         res.send({
             kvizovi
@@ -60,8 +60,8 @@ app.post('/dodajKviz/:idKreatora/:imeKviza',(req,res) =>{
     const {idKreatora} = req.params;
     const {imeKviza} = req.params;
     con.query(`INSERT INTO Kviz(idKreatora, imeKviza) VALUES(${idKreatora},"${imeKviza}");`, function (err, kvizovi, fields) {
-        if (err) throw err;
-        res.send(200);
+        if (err) res.sendStatus(500)
+        res.sendStatus(200);
     });
 });
 
