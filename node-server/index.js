@@ -12,15 +12,46 @@ var con = mysql.createConnection({
   database        : process.env.DB_DATABASE 
 });
 
-app.get('/kviz/:id/:rb',(req,res) =>{
+app.get('/kviz/:id',(req,res) =>{
     const {id} = req.params;
-    const {rb} = req.params;
-    con.query(`select * from Pitanje WHERE idKviza = ${id}`, function (err, kviz, fields) {
+    con.query(`select * from Kviz WHERE idKviza = ${id}`, function (err, kviz, fields) {
         if (err) throw err;
         console.log(kviz)
-        console.log(rb)
         res.send({
             kviz
+        });
+    });
+});
+
+app.get('/pitanja/:idKviza',(req,res) =>{
+    const {idKviza} = req.params;
+    con.query(`select * from Pitanje WHERE idKviza = ${idKviza}`, function (err, pitanja, fields) {
+        if (err) throw err;
+        console.log(pitanja)
+        res.send({
+            pitanja
+        });
+    });
+});
+
+app.get('/odgovori/:idPitanja',(req,res) =>{
+    const {idPitanja} = req.params;
+    con.query(`select * from Odgovor WHERE idPitanja = ${idPitanja}`, function (err, odgovori, fields) {
+        if (err) throw err;
+        console.log(odgovori)
+        res.send({
+            odgovori
+        });
+    });
+});
+
+app.get('/korisnikKvizovi/:idKreatora',(req,res) =>{
+    const {idKreatora} = req.params;
+    con.query(`select * from Kviz WHERE idKreatora = ${idKreatora}`, function (err, kvizovi, fields) {
+        if (err) throw err;
+        console.log(kvizovi)
+        res.send({
+            kvizovi
         });
     });
 });
