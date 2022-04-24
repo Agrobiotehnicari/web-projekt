@@ -56,4 +56,13 @@ app.get('/korisnikKvizovi/:idKreatora',(req,res) =>{
     });
 });
 
+app.post('/dodajKviz/:idKreatora/:imeKviza',(req,res) =>{
+    const {idKreatora} = req.params;
+    const {imeKviza} = req.params;
+    con.query(`INSERT INTO Kviz(idKreatora, imeKviza) VALUES(${idKreatora},"${imeKviza}");`, function (err, kvizovi, fields) {
+        if (err) throw err;
+        res.send(200);
+    });
+});
+
 app.listen(8080, () => console.log('live on http://localhost:8080'));
