@@ -1,0 +1,56 @@
+<div class="d-flex bd-highlight">
+
+    <div class="p-2 flex-fill bd-highlight">
+        
+        <a
+            style="cursor: pointer;"
+            routerLinkActive="true"
+            routerLink="/highest-rated-albums">
+           
+            <div class="container list-group-item" style="border: 0px;">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="col-md-5" 
+                            style="font-family: Dosis; pointer-events: none; color: black"
+                            >Igraj kviz</h3>
+                        <hr>
+                        <div class="row" style="margin-left: 20px;">
+                            <div class="row" style="margin-left: 20px;">
+                                <app-kviz-item 
+                                *ngFor="let kvizItem of kvizovi; let i = index"
+                                [kviz]="kvizItem"
+                                [index]="i"></app-kviz-item>
+                        </div>
+                    </div>
+                        <div class="row" style="margin-left: 20px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="p-2 flex-fill bd-highlight">
+
+        <a
+            style="cursor: pointer;"
+            routerLinkActive="true"
+            routerLink="/highest-rated-albums">
+           
+            <div class="container list-group-item" style="border: 0px;">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="col-md-5" 
+                            style="font-family: Dosis; pointer-events: none; color: black"
+                            >Radi kviz</h3>
+                        <hr>
+                        <div class="row" style="margin-left: 20px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+    </div>
+  </div>
