@@ -14,6 +14,11 @@ var con = mysql.createConnection({
 
 app.get('/kviz/:id',(req,res) =>{
     const {id} = req.params;
+    if(isNaN(id))
+     {
+        res.sendStatus(403);
+        return;
+    }
     con.query(`select * from Kviz WHERE idKviza = ${id}`, function (err, kviz, fields) {
         if (err) res.sendStatus(500)
         console.log(kviz)
@@ -25,6 +30,11 @@ app.get('/kviz/:id',(req,res) =>{
 
 app.get('/pitanja/:idKviza',(req,res) =>{
     const {idKviza} = req.params;
+    if(isNaN(idKviza))
+     {
+        res.sendStatus(403);
+        return;
+    }
     con.query(`select * from Pitanje WHERE idKviza = ${idKviza}`, function (err, pitanja, fields) {
         if (err) res.sendStatus(500)
         console.log(pitanja)
@@ -36,6 +46,11 @@ app.get('/pitanja/:idKviza',(req,res) =>{
 
 app.get('/odgovori/:idPitanja',(req,res) =>{
     const {idPitanja} = req.params;
+    if(isNaN(idPitanja))
+     {
+        res.sendStatus(403);
+        return;
+    }
     con.query(`select * from Odgovor WHERE idPitanja = ${idPitanja}`, function (err, odgovori, fields) {
         if (err) res.sendStatus(500)
         console.log(odgovori)
@@ -47,6 +62,11 @@ app.get('/odgovori/:idPitanja',(req,res) =>{
 
 app.get('/korisnikKvizovi/:idKreatora',(req,res) =>{
     const {idKreatora} = req.params;
+    if(isNaN(idKreatora))
+     {
+        res.sendStatus(403);
+        return;
+    }
     con.query(`select * from Kviz WHERE idKreatora = ${idKreatora}`, function (err, kvizovi, fields) {
         if (err) res.sendStatus(500)
         console.log(kvizovi)
@@ -59,6 +79,12 @@ app.get('/korisnikKvizovi/:idKreatora',(req,res) =>{
 app.post('/dodajKviz/:idKreatora/:imeKviza',(req,res) =>{
     const {idKreatora} = req.params;
     const {imeKviza} = req.params;
+    if(isNaN(idKreatora))
+    {
+        res.sendStatus(403);
+        return;
+    }
+    //Todo provjeri jel ime kviza SQL injection
     con.query(`INSERT INTO Kviz(idKreatora, imeKviza) VALUES(${idKreatora},"${imeKviza}");`, function (err, kvizovi, fields) {
         if (err) res.sendStatus(500)
         res.sendStatus(200);
