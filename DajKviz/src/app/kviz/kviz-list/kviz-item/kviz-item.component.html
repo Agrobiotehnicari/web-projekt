@@ -4,16 +4,18 @@
         style="pointer-events: none; border: 0px; ">
 
 
-        <div class="container">
-                  <img
-                        src="{{ kviz.imagePath }}"
-                        alt="{{ kviz.name }}"
-                        class="img-responsive"
-                        style="width: 150px; height: 150px; margin-bottom: 10px;">
-                        <h5 style="max-width: 150px; font-family: Arial;">{{ kviz.name }}</h5>
-                        {{ kviz.creator }}
-       </div>
+        <a class="container" style="width: 5cm;">
+            <div class="card" style="width: 14rem;">
+                <img src="{{ kviz.imagePath }}" class="card-img-top" alt="{{ kviz.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ kviz.name }}</h5>
+                        <p class="card-text">{{ kviz.description }}</p>
+                    </div>
+            </div>
+        </a>
     </a>
 </div>
+
+
 
 

@@ -5,9 +5,9 @@ import { KvizResolverService } from "./kviz/kviz-resolver.service";
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent,
-        resolve: [KvizResolverService]
-    },
+    { path: 'home', component: HomeComponent
+        //resolve: [KvizResolverService]
+    }
 ]
 
 @NgModule({

@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@a
 import { Kviz } from "./kviz.model";
 import { KvizService } from "./kviz.service";
 import { DataStorageService } from "./data-storage.service";
+import { KvizNew } from "./kvizNew.model";
 
 @Injectable({ providedIn: 'root' })
 export class KvizResolverService implements Resolve<Kviz[]>{
