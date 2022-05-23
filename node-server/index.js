@@ -84,10 +84,29 @@ app.post('/dodajKviz/:idKreatora/:imeKviza',(req,res) =>{
         res.sendStatus(403);
         return;
     }
-    //Todo provjeri jel ime kviza SQL injection
+    const onlyLettersPattern = /^[A-Za-z0-9 ]+$/;
+    if(!imeKviza.match(onlyLettersPattern)){
+        return res.status(403).json({ err: "No special characters, please!"})
+      }
     con.query(`INSERT INTO Kviz(idKreatora, imeKviza) VALUES(${idKreatora},"${imeKviza}");`, function (err, kvizovi, fields) {
         if (err) res.sendStatus(500)
         res.sendStatus(200);
+    });
+});
+
+app.get('/quiz/:id',(req,res) =>{
+    const {id} = req.params;
+    if(isNaN(id))
+     {
+        res.sendStatus(403);
+        return;
+    }
+    con.query(`SELECT * from Kviz, Pitanje, Odgovor where Kviz.id=${id};`, function (err, kviz, fields) {
+        if (err) res.sendStatus(500)
+        console.log(kviz)
+        res.send({
+            kviz
+        });
     });
 });
 
