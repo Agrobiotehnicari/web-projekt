@@ -94,4 +94,20 @@ app.post('/dodajKviz/:idKreatora/:imeKviza',(req,res) =>{
     });
 });
 
+app.get('/quiz/:id',(req,res) =>{
+    const {id} = req.params;
+    if(isNaN(id))
+     {
+        res.sendStatus(403);
+        return;
+    }
+    con.query(`SELECT * from Kviz, Pitanje, Odgovor where Kviz.id=${id};`, function (err, kviz, fields) {
+        if (err) res.sendStatus(500)
+        console.log(kviz)
+        res.send({
+            kviz
+        });
+    });
+});
+
 app.listen(8080, () => console.log('live on http://localhost:8080'));
