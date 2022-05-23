@@ -84,7 +84,10 @@ app.post('/dodajKviz/:idKreatora/:imeKviza',(req,res) =>{
         res.sendStatus(403);
         return;
     }
-    //Todo provjeri jel ime kviza SQL injection
+    const onlyLettersPattern = /^[A-Za-z0-9 ]+$/;
+    if(!imeKviza.match(onlyLettersPattern)){
+        return res.status(403).json({ err: "No special characters and no numbers, please!"})
+      }
     con.query(`INSERT INTO Kviz(idKreatora, imeKviza) VALUES(${idKreatora},"${imeKviza}");`, function (err, kvizovi, fields) {
         if (err) res.sendStatus(500)
         res.sendStatus(200);
