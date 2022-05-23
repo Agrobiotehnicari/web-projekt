@@ -86,7 +86,7 @@ app.post('/dodajKviz/:idKreatora/:imeKviza',(req,res) =>{
     }
     const onlyLettersPattern = /^[A-Za-z0-9 ]+$/;
     if(!imeKviza.match(onlyLettersPattern)){
-        return res.status(403).json({ err: "No special characters and no numbers, please!"})
+        return res.status(403).json({ err: "No special characters, please!"})
       }
     con.query(`INSERT INTO Kviz(idKreatora, imeKviza) VALUES(${idKreatora},"${imeKviza}");`, function (err, kvizovi, fields) {
         if (err) res.sendStatus(500)
