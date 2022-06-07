@@ -1,3 +1,4 @@
+import { QA } from "./QA.model";
 import { Ratings } from "./ratings.model";
 
 export class Kviz {
@@ -7,8 +8,7 @@ export class Kviz {
     public ratings: Ratings[];
     public createDate: Date;
     public description: string;
-    public question: string;
-    public answer: string;
+    public QA: QA[];
 
 
     constructor(name: string, 
@@ -17,8 +17,7 @@ export class Kviz {
                 ratings: Ratings[],
                 createDate: Date,
                 description: string,
-                question: string,
-                answer: string){
+                QA: QA[]){
 
         this.name = name;
         this.creator = creator;
@@ -26,7 +25,6 @@ export class Kviz {
         this.ratings = ratings;
         this.createDate = createDate;
         this.description = description;
-        this.question   = question;
-        this.answer = answer;
+        this.QA = QA;
     }
 }

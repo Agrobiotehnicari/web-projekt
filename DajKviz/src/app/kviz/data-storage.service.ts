@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { map, tap } from "rxjs/operators";
 import { Kviz } from "./kviz.model";
 import { KvizService } from "./kviz.service";
+import { KvizNew } from "./kvizNew.model";
 
 @Injectable({
     providedIn: 'root'

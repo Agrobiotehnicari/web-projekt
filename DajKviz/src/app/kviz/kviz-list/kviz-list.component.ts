@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Kviz } from '../kviz.model';
 import { KvizService } from '../kviz.service';
+import { KvizNew } from '../kvizNew.model';
 
 @Component({
   selector: 'app-kviz-list',

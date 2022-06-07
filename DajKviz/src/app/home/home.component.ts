@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Kviz } from '../kviz/kviz.model';
 import { KvizService } from '../kviz/kviz.service';
+import { KvizNew } from '../kviz/kvizNew.model';
 
 @Component({
   selector: 'app-home',
