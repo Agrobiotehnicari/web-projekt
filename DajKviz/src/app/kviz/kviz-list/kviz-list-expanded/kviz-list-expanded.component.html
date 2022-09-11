@@ -1,0 +1,29 @@
+<a 
+    class="list-group-item list-group-item-action "
+    style="cursor: pointer; margin-left: 10px;" 
+    [routerLink]="[index]"
+    routerLinkActive="active">
+
+    <div class="media">
+        <img 
+            class="align-self-start mr-3 img-responsive" 
+            src="{{ kviz.imagePath }}" 
+            alt="{{ kviz.name }}"
+            style="width: 150px; height: 150px;">
+            
+        <div class="media-body">
+        <h5 class="mt-0" style="font-family: Arial;">{{ kviz.name }}</h5>
+        <h6 style="display:inline; font-family: Arial;">{{ kviz.creator }} · </h6> 
+        <h6 style="display:inline; color: rgb(180, 173, 173); font-family: Arial;">
+            {{ kviz.createDate | date: 'yyyy'}} 
+        </h6>
+        <p> <img src="https://freepngimg.com/thumb/star/19-star-png-image-thumb.png"
+                 style="width: 17px; height: 17px;" 
+                 class="align-text-bottom">
+            {{ kvizService.getKvizRating(kviz) }}</p>
+        <p style="font-family: Arial;">
+            {{ ((kviz.description).length > 100) ? (kviz.description | slice:0:100) + '..' : (kviz.description)  }}</p>
+        </div>
+    </div>
+</a>
+
