@@ -4,6 +4,7 @@ const passport = require("passport");
 const route = express.Router();
 const authController = require("../controllers/authController.js");
 const kvizController = require("../controllers/kvizController.js");
+const resultController = require("../controllers/resultController.js");
 
 route.get("/", (req, res) => {
   res.send("Crud App!");
@@ -18,7 +19,14 @@ route.post("/kviz", kvizController.create);
 route.post("/kviz/:id/rating", kvizController.addRating);
 route.get("/kviz", kvizController.find);
 route.get("/kviz/:id", kvizController.findById);
+route.get("/kviz/user/:id", kvizController.findByUserId);
 route.put("/kviz/:id", kvizController.update);
 route.delete("/kviz/:id", kvizController.delete);
+
+route.post("/result", resultController.create);
+route.get("/result", resultController.find);
+route.get("/result/user/:id", resultController.finbByUserId);
+route.get("/result/kviz/:id", resultController.findByKvizId);
+route.delete("/result/:id", resultController.delete);
 
 module.exports = route;

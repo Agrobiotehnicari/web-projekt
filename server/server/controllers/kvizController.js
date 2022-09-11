@@ -43,6 +43,30 @@ exports.findById = (req, res) => {
     });
 };
 
+exports.findByUserId = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send("You are not logged in");
+  }
+
+  const id = req.params.id;
+
+  Kvizdb.find({ "creator.id": id })
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({
+          message: `Quiz with ${id} not found!`,
+        });
+      } else {
+        return res.json(data);
+      }
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .send({ message: `Error retrieving quiz with id ${id}` });
+    });
+};
+
 // Create and save a new project
 exports.create = (req, res) => {
   if (!req.isAuthenticated()) {
