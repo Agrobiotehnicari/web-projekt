@@ -1,3 +1,6 @@
+const url = document.getElementsByTagName('base')[0].href;
+
 export const environment = {
-  production: true
+  production: true,
+  baseUrl: url
 };

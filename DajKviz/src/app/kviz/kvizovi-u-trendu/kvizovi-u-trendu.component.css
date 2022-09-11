@@ -1,0 +1,14 @@
+.kontenjer{
+    height: 80vh;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.row{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0;  
+    background: transparent; 
+}

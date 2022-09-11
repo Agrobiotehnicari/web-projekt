@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Kviz } from '../../kviz.model';
-import { KvizNew } from '../../kvizNew.model';
 
 @Component({
   selector: 'app-kviz-item',

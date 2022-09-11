@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Kviz } from '../kviz/kviz.model';
 import { KvizService } from '../kviz/kviz.service';
-import { KvizNew } from '../kviz/kvizNew.model';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +14,7 @@ export class HomeComponent implements OnInit {
   constructor(private kvizService: KvizService) { }
 
   ngOnInit(): void {
-    this.kvizovi = this.kvizService.getKvizovi();
+    // this.kvizovi = this.kvizService.getKvizovi();
   }
 
 }

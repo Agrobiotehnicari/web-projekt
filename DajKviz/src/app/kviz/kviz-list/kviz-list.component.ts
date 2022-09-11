@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Kviz } from '../kviz.model';
 import { KvizService } from '../kviz.service';
-import { KvizNew } from '../kvizNew.model';
 
 @Component({
   selector: 'app-kviz-list',
@@ -16,7 +15,7 @@ export class KvizListComponent implements OnInit {
   constructor(private kvizService: KvizService) { }
 
   ngOnInit(): void {
-    this.kvizovi = this.kvizService.getKvizovi();
+    // this.kvizovi = this.kvizService.getKvizovi();
   }
 
 }
