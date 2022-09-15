@@ -1,3 +1,4 @@
+const CreateKvizDto = require("../models/CreateKvizDto");
 const Kvizdb = require("../models/kviz");
 
 // Retrieve and return all projects / retrieve and return a single project
@@ -6,75 +7,105 @@ exports.find = (req, res) => {
     return res.status(401).send("You are not logged in");
   }
 
-  if (req.query.id) {
-    const id = req.query.id;
+  Kvizdb.find()
+    .then((kviz) => {
+      return res.json(kviz);
+    })
+    .catch((err) => {
+      return res.status(500).send({
+        message:
+          err.message || "Error occurred while retrieving quiz information!",
+      });
+    });
+};
 
-    Kvizdb.findById(id)
-      .then((data) => {
-        if (!data) {
-          res.status(404).send({
-            message: `Quiz with ${id} not found!`,
-          });
-        } else {
-          res.json(data);
-        }
-      })
-      .catch((err) => {
-        res
-          .status(500)
-          .send({ message: `Error retrieving quiz with id ${id}` });
-      });
-  } else {
-    Kvizdb.find()
-      .then((kviz) => {
-        res.json(kviz);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message:
-            err.message || "Error occurred while retrieving quiz information!",
-        });
-      });
+exports.findById = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send("You are not logged in");
   }
+
+  const id = req.params.id;
+
+  Kvizdb.findById(id)
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({
+          message: `Quiz with ${id} not found!`,
+        });
+      } else {
+        return res.json(data);
+      }
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .send({ message: `Error retrieving quiz with id ${id}` });
+    });
+};
+
+exports.findByUserId = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send("You are not logged in");
+  }
+
+  const id = req.params.id;
+
+  Kvizdb.find({ "creator.id": id })
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({
+          message: `Quiz with ${id} not found!`,
+        });
+      } else {
+        return res.json(data);
+      }
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .send({ message: `Error retrieving quiz with id ${id}` });
+    });
 };
 
 // Create and save a new project
 exports.create = (req, res) => {
   if (!req.isAuthenticated()) {
-    res.status(401).send({ message: "You are not logged in!" });
+    return res.status(401).send({ message: "You are not logged in!" });
   }
 
   // validate request
   if (!req.body) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
+    return res.status(400).send({ message: "Content can not be empty!" });
   }
 
+  const kvizInfo = new CreateKvizDto(
+    (name = req.body.name),
+    (imagePath = req.body.imagePath),
+    (description = req.body.description),
+    (QA = req.body.QA)
+  );
   // new project
   const kviz = new Kvizdb({
-    name: req.body.name,
-    price: req.body.price,
-    tasks_done: "",
-    description: req.body.description,
+    name: kvizInfo.name,
+    description: kvizInfo.description,
+    imagePath: kvizInfo.imagePath,
+    QA: kvizInfo.QA,
     created_at: new Date(Date.now()),
-    updated_at: new Date(Date.now()),
-    owner: {
+    creator: {
       id: req.user._id,
       username: req.user.username,
     },
-    members: [],
   });
-
-  // save project in db
-  project
-    .save(project)
+  // save kviz in db
+  kviz
+    .save(kviz)
     .then((data) => {
-      res.send(data);
+      return res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
-          err.message || "Some error occurred while creating a new project!",
+          err.message || "Some error occurred while creating a new quiz!",
       });
     });
 };
@@ -93,60 +124,75 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Projectdb.findById(id).then((project) => {
-    if (project.finished_at) {
-      // Project is archived and cannot be updated
-      return res.send(project);
-    }
-    // Update updated_at attribute
-    project.updated_at = new Date(Date.now());
-    // Only owner can update everything on project
-    if (project.owner.id === req.user._id.toString()) {
-      updateProject(id, req.body, res);
-    }
-    // Members can change only tasks_done
-    else if (
-      project.members.find((member) => member._id.equals(req.user._id))
-    ) {
-      project.tasks_done = req.body.tasks_done;
-      updateProject(id, project, res);
+  Kvizdb.findById(id).then((kviz) => {
+    // Only creator can update kviz
+    if (kviz.creator.id === req.user._id.toString()) {
+      updateKviz(id, req.body, res);
     } else {
-      // Current user isn't a project member
-      res.status(401).send("Unauthorized");
+      return res.status(401).send("Unauthorized");
     }
   });
 };
 
-function updateProject(id, data, res) {
-  Projectdb.findByIdAndUpdate(id, data, { new: true })
-    .then((project) => {
-      if (!project) {
-        res.status(404).send({ message: `Cannot update project with ${id}.` });
+exports.addRating = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send("You are not logged in");
+  }
+
+  if (!req.body) {
+    return res
+      .status(400)
+      .send({ message: "Data to update can not be empty!" });
+  }
+
+  const id = req.params.id;
+
+  Kvizdb.findById(id).then((kviz) => {
+    // Only logged in user can add rating
+    if (kviz.ratings.find((rating) => (rating.userId = req.user._id))) {
+      return res.status(400).send({ message: "You already rated this quiz!" });
+    } else {
+      kviz.ratings.push({
+        userId: req.user._id,
+        rating: req.body.rating,
+      });
+      updateKviz(id, kviz, res);
+    }
+  });
+};
+
+function updateKviz(id, data, res) {
+  Kvizdb.findByIdAndUpdate(id, data, { new: true })
+    .then((kviz) => {
+      if (!kviz) {
+        return res
+          .status(404)
+          .send({ message: `Cannot update kviz with ${id}.` });
       } else {
-        res.send(project);
+        return res.send(kviz);
       }
     })
     .catch((err) => {
-      res.status(500).send({ message: "Invalid project information" });
+      return res.status(500).send({ message: "Invalid kviz information" });
     });
 }
 
-function deleteProject(id, res) {
-  Projectdb.findByIdAndDelete(id)
-    .then((data) => {
-      if (!data) {
-        res
-          .status(404)
-          .send({ message: `Cannot delete with id ${id}. Maybe id is wrong.` });
+function deleteKviz(id, res) {
+  Kvizdb.findByIdAndDelete(id)
+    .then((kviz) => {
+      if (!kviz) {
+        return res.status(404).send({
+          message: `Cannot delete kviz with id ${id}. Maybe id is wrong.`,
+        });
       } else {
-        res.send({
-          message: "Project was deleted successfully!",
+        return res.send({
+          message: "Kviz was deleted successfully!",
         });
       }
     })
     .catch((err) => {
-      res.status(500).send({
-        message: `Could not delete project with ${id}`,
+      return res.status(500).send({
+        message: `Could not delete kviz with ${id}`,
       });
     });
 }
@@ -158,56 +204,19 @@ exports.delete = (req, res) => {
   }
 
   const id = req.params.id;
-  Projectdb.findById(id)
+  Kvizdb.findById(id)
     .then((data) => {
-      if (data.owner.id !== req.user._id.toString()) {
+      if (data.creator.id !== req.user._id.toString()) {
         return res
           .status(401)
-          .send({ message: "Only owner can delete the project" });
+          .send({ message: "Only creator can delete the kviz" });
       } else {
-        deleteProject(id, res);
+        deleteKviz(id, res);
       }
     })
     .catch((err) => {
-      res
+      return res
         .status(500)
-        .send({ message: `Error retrieving project with id ${id}` });
-    });
-};
-
-exports.archive = (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).send("You are not logged in");
-  }
-
-  const id = req.params.id;
-
-  // Get project by id
-  Projectdb.findById(id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Project with ${id} not found!`,
-        });
-      } else {
-        if (data.finished_at) {
-          return res
-            .status(400)
-            .send({ message: "Project is already archived" });
-        } else if (data.owner.id !== req.user._id.toString()) {
-          return res
-            .status(401)
-            .send({ message: "Only owner can archive projects!" });
-        } else {
-          data.finished_at = new Date(Date.now());
-          // Update the project with archived date
-          updateProject(id, data, res);
-        }
-      }
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send({ message: `Error retrieving project with id ${id}` });
+        .send({ message: `Error retrieving kviz with id ${id}` });
     });
 };

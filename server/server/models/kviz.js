@@ -19,7 +19,7 @@ const kvizSchema = new mongoose.Schema({
   },
   creator: {
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
     username: {
@@ -33,7 +33,7 @@ const kvizSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
-      value: {
+      rating: {
         type: Number,
         required: true,
       },
