@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
 
     authObs.subscribe(resData => {
       console.log(resData);
+      this.authService.user.next(resData);
+      localStorage.setItem('user', JSON.stringify(resData));
       this.router.navigate(['/home']);
     }, 
     errorMessage => {

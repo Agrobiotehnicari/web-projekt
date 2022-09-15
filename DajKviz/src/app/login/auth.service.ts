@@ -1,7 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { User } from '../models/user.model';
 
 export interface AuthResponseData {
   id: number,
@@ -13,8 +15,11 @@ export interface AuthResponseData {
 })
 export class AuthService {
 
+  user = new BehaviorSubject<User>(null);
+
   constructor(public http: HttpClient,
-              @Inject('API_BASE_URL') private baseUrl: string) { }
+              @Inject('API_BASE_URL') private baseUrl: string,
+              public router: Router) { }
 
   login(username: string, password: string){
     return this.http.post<AuthResponseData>(`${this.baseUrl}/login`,{
@@ -22,8 +27,8 @@ export class AuthService {
         password: password,
     },{
       withCredentials: true
-    }
-    )
+    })
+    
     }
   
 
@@ -38,23 +43,36 @@ export class AuthService {
     })
   }
 
-  private handleError(errorRes: HttpErrorResponse){
-    let errorMessage = 'An unknown error occurred.';
+  logout(){
+    return this.http.get<void>(`${this.baseUrl}/logout`,
+    {
+      withCredentials: true,
+      responseType: 'text' as 'json'
+    },).subscribe((response) => {
+      localStorage.removeItem('user');
+      this.user.next(null);
+      this.router.navigate(['/prijava']);
+    })
+  }
 
-        if(!errorRes.error || !errorRes.error.error){
-            return throwError(errorMessage);
-        }
-        switch(errorRes.error.error.message){
-            case 'EMAIL_EXISTS':
-                errorMessage = 'This email is taken.';
-                break;
-            case 'EMAIL_NOT_FOUND':
-                errorMessage = 'Email not found.';
-                break;
-            case 'INVALID_PASSWORD':
-                errorMessage = 'Wrong password.';
-                break;
-        }
-        return throwError(errorMessage);
-}
+  autoLogin() {
+    const userInfo: {
+      username: string;
+      id: number;
+    } = JSON.parse(localStorage.getItem('userInfo'));
+    if (!userInfo) {
+      return;
+    }
+
+    const loadedUser = new User(
+      userInfo.username,
+      userInfo.id
+    );
+
+    if (loadedUser.username) {
+      this.user.next(loadedUser);
+    }
+  }
+
+  
 }

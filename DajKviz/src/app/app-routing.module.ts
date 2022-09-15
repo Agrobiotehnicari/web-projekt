@@ -7,11 +7,13 @@ import { KvizoviUTrenduComponent } from "./kviz/kvizovi-u-trendu/kvizovi-u-trend
 import { MojiKvizoviComponent } from "./kviz/moji-kvizovi/moji-kvizovi.component";
 import { NoviKvizComponent } from "./kviz/novi-kviz/novi-kviz.component";
 import { RijeseniKvizoviComponent } from "./kviz/rijeseni-kvizovi/rijeseni-kvizovi.component";
+import { AuthGuard } from "./login/auth.guard";
 import { LoginComponent } from "./login/login.component";
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent
+    { path: 'home', component: HomeComponent,
+        canActivate: [AuthGuard],
         //resolve: [KvizResolverService]
     },
     { path: 'istrazi', component: IstraziComponent },
