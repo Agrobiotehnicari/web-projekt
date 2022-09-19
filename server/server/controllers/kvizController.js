@@ -1,6 +1,8 @@
 const CreateKvizDto = require("../models/CreateKvizDto");
 const Kvizdb = require("../models/kviz");
 const KvizDto = require("../models/KvizDto");
+const Resultdb = require("../models/result");
+const mongoose = require('mongoose');
 
 // Retrieve and return all projects / retrieve and return a single project
 exports.find = (req, res) => {
@@ -72,6 +74,28 @@ exports.findByUserId = (req, res) => {
     });
 };
 
+exports.findUserSolved = async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send("You are not logged in");
+  }
+  const id = req.params.id;
+
+  const solvedKvizovi = await Resultdb.find({userId: id}).sort({created_at: -1})
+          .then(data => {
+            return data});
+  if(solvedKvizovi.length === 0){
+    return res.status(404).send({message: `Error finding results with user id ${id}`});
+  }
+
+  const kvizIds = solvedKvizovi.map(function(el) { return mongoose.Types.ObjectId(el.kvizId) });
+  Kvizdb.find({"_id" : {"$in" : kvizIds}}).then(data => {
+    const kvizovi = data.map(kviz => new KvizDto(
+      kviz._id, kviz.name, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
+    ));
+    return res.status(200).send(kvizovi);
+   });
+}
+
 // Create and save a new project
 exports.create = (req, res) => {
   if (!req.isAuthenticated()) {
@@ -138,6 +162,26 @@ exports.update = (req, res) => {
     }
   });
 };
+
+exports.getTrendingKviz = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send("You are not logged in");
+  }
+
+  Kvizdb.find().sort({ratings : -1}).then((data) => {
+    if (!data) {
+      return res.status(404).send({
+        message: `No kvizes have been rated`,
+      });
+    } else {
+
+      const kvizovi = data.map(kviz => new KvizDto(
+        kviz._id, kviz.name, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
+      ));
+      return res.status(200).send(kvizovi);
+    }
+  })
+}
 
 exports.addRating = (req, res) => {
   if (!req.isAuthenticated()) {

@@ -18,8 +18,10 @@ route.post("/register", authController.register);
 route.post("/kviz", kvizController.create);
 route.post("/kviz/:id/rating", kvizController.addRating);
 route.get("/kviz", kvizController.find);
+route.get("/kviz/trending", kvizController.getTrendingKviz);
 route.get("/kviz/:id", kvizController.findById);
 route.get("/kviz/user/:id", kvizController.findByUserId);
+route.get("/kviz/user/:id/solved", kvizController.findUserSolved);
 route.put("/kviz/:id", kvizController.update);
 route.delete("/kviz/:id", kvizController.delete);
 

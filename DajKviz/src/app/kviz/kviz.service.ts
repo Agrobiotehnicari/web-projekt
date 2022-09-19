@@ -197,6 +197,15 @@ export class KvizService {
         return this.http.get<KvizDto[]>(`${this.baseUrl}/kviz/user/${userId}`);
     }
 
-    
+    getUserSolvedKviz() : Observable<KvizDto[]>
+    {
+        const userId = JSON.parse(localStorage.getItem('user'))['id'];
+        return this.http.get<KvizDto[]>(`${this.baseUrl}/kviz/user/${userId}/solved`);
+    }
+
+    getTrendingKvizovi() : Observable<KvizDto[]>
+    {
+        return this.http.get<KvizDto[]>(`${this.baseUrl}/kviz/trending`);
+    }
 
 }

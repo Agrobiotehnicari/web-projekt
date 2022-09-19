@@ -19,6 +19,10 @@ const resultSchema = new mongoose.Schema({
       required: true,
     },
   },
+  created_at: {
+    type: Date,
+    required: true,
+  },
 });
 
 resultSchema.index({ userId: 1, kvizId: 1 }, { unique: true });
