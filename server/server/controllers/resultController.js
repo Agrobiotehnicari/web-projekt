@@ -86,6 +86,7 @@ exports.create = (req, res) => {
     userId: resultInfo.userId,
     kvizId: resultInfo.kvizId,
     result: resultInfo.result,
+    created_at: new Date(Date.now()),
   });
   // save result in db
   resultEntry
