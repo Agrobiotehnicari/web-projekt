@@ -17,6 +17,9 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem('user')){
+      this.router.navigate(['/home']);
+    }
   }
 
   onSwitchMode(){

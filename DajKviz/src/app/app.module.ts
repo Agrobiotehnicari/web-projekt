@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { KvizListComponent } from './kviz/kviz-list/kviz-list.component';
 import { KvizItemComponent } from './kviz/kviz-list/kviz-item/kviz-item.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { IstraziComponent } from './istrazi/istrazi.component';
 import { NoviKvizComponent } from './kviz/novi-kviz/novi-kviz.component';
@@ -18,6 +18,7 @@ import { KvizListExpandedComponent } from './kviz/kviz-list/kviz-list-expanded/k
 import { KvizDetailComponent } from './kviz/kviz-detail/kviz-detail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
+import { AuthInterceptorService } from './login/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,11 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

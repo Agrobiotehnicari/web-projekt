@@ -49,7 +49,8 @@ app.use(
       //secure: true,
       //httpOnly: false,
       //sameSite: 'none',
-      maxAge: 1000 * 60 * 10,
+      // 1 day cookie
+      maxAge: 1000 * 60 * 60 * 24,
     },
   })
 );

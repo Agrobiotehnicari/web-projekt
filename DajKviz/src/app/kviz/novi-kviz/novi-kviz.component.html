@@ -5,8 +5,13 @@
         <h3 style="font-family: Arial;">Dodaj novi kviz</h3>
         <hr>
         </div>
+
+        <div *ngIf="successAlert" class="alert alert-success" role="alert">
+          Kviz uspješno napravljen!
+        </div>
+
         <div class="p-2">
-            <form #myForm="ngForm" (submit)="onSubmit(name.value, imgURL.value, description.value, questions, myForm)">
+            <form #myForm="ngForm" (submit)="onSubmit(name.value, imgURL.value, description.value, myForm)">
 
                 <div class="form-row">
                   <div class="form-group col-md-12">
@@ -35,9 +40,6 @@
                 <div 
                 *ngFor="let question of questions, let i = index"
                 [index] = "i">
-                {{ question.question }}
-                {{ question.answers[0] }}
-                {{ question.correctAnswer }}
                 <div class="form-row">
                   <div class="form-group col-md-12">
                     <label for="inputQuestion" style="font-family: Arial;">Pitanje:</label>

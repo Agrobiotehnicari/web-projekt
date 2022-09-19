@@ -45,7 +45,10 @@
                                     style="pointer-events: none; color: black"
                                     >Moji kvizovi</h3>
                                 <hr>
-                                
+                                <app-kviz-item 
+                                *ngFor="let kvizItem of userKvizovi; let i = index"
+                                [kviz]="kvizItem"
+                                [index]="i"></app-kviz-item>
                             </div>
                         </div>
                     </div>

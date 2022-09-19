@@ -4,6 +4,7 @@ import { Observable, Subject } from "rxjs";
 import { Answer } from "./answer.model";
 import { CreateKviz } from "./create-kviz.model";
 import { Kviz } from "./kviz.model";
+import { KvizDto } from "./KvizDto.model";
 import { QA } from "./QA.model";
 
 @Injectable({
@@ -185,9 +186,17 @@ export class KvizService {
         return question = new QA('',0, answers);
     }
 
-    addKviz(kviz: CreateKviz): Observable<any>
+    addKviz(kviz: CreateKviz): Observable<Object>
     {
-        return this.http.post<void>(`${this.baseUrl}/Kviz`, kviz)
+        return this.http.post<Object>(`${this.baseUrl}/kviz`, kviz)
     }
+
+    getUserKviz(): Observable<KvizDto[]>
+    {
+        const userId = JSON.parse(localStorage.getItem('user'))['id'];
+        return this.http.get<KvizDto[]>(`${this.baseUrl}/kviz/user/${userId}`);
+    }
+
+    
 
 }

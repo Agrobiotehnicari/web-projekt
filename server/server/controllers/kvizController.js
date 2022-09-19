@@ -1,5 +1,6 @@
 const CreateKvizDto = require("../models/CreateKvizDto");
 const Kvizdb = require("../models/kviz");
+const KvizDto = require("../models/KvizDto");
 
 // Retrieve and return all projects / retrieve and return a single project
 exports.find = (req, res) => {
@@ -50,20 +51,24 @@ exports.findByUserId = (req, res) => {
 
   const id = req.params.id;
 
-  Kvizdb.find({ "creator.id": id })
+  Kvizdb.find({ "creator.id": id }).sort({created_at: -1})
     .then((data) => {
       if (!data) {
         return res.status(404).send({
-          message: `Quiz with ${id} not found!`,
+          message: `Quizes with user id ${id} not found!`,
         });
       } else {
-        return res.json(data);
+
+        const kvizovi = data.map(kviz => new KvizDto(
+          kviz._id, kviz.name, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
+        ));
+        return res.status(200).send(kvizovi);
       }
     })
     .catch((err) => {
       return res
         .status(500)
-        .send({ message: `Error retrieving quiz with id ${id}` });
+        .send({ message: `Error retrieving quiz with user id ${id}` });
     });
 };
 
@@ -100,7 +105,7 @@ exports.create = (req, res) => {
   kviz
     .save(kviz)
     .then((data) => {
-      return res.send(data);
+      return res.status(201).send({id: data._id});
     })
     .catch((err) => {
       return res.status(500).send({
