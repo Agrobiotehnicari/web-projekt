@@ -19,6 +19,7 @@ import { KvizDetailComponent } from './kviz/kviz-detail/kviz-detail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptorService } from './login/auth-interceptor.service';
+import { PlayKvizComponent } from './kviz/play-kviz/play-kviz.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { AuthInterceptorService } from './login/auth-interceptor.service';
     RijeseniKvizoviComponent,
     KvizListExpandedComponent,
     KvizDetailComponent,
-    LoginComponent
+    LoginComponent,
+    PlayKvizComponent
     
   ],
   imports: [
