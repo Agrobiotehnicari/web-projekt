@@ -34,7 +34,7 @@
       <div class="d-flex justify-content-center">
         <ng-template [ngIf]="!result" [ngIfElse]="hasResult">
           <div>
-            <button type="button" class="btn btn-outline-primary" 
+            <button type="button" class="btn btn-outline-primary" routerLinkActive="active" [routerLink]="'/igraj/'+id"
             style="
               padding: 1rem 2rem 1rem 2rem;
               font-size: 1.25rem;

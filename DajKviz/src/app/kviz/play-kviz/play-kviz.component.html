@@ -1,5 +1,49 @@
-<div class="card">
-    <div class="card-body">
-      This is some text within a card body.
+<div class="card p-4">
+  <div class="d-flex flex-row">
+    <div>
+      <img [src]="kviz?.imagePath" style="width: 200px; height: 200px;">
     </div>
+    <div class="ml-3">
+      <h2> {{ kviz?.name }} </h2>
+      <div class="ml-2">
+        <p> Made by: {{ kviz?.creator.username }}</p>
+        <p> {{ kviz?.description }} </p>
+      </div>
+      
+    </div>
+    
+  </div>
+    <div class="card-body text-center p-3" *ngFor="let question of kviz?.QA; index as i;">
+      <h3> {{ question.question }}</h3>
+      <div class="container w-50 mt-3">
+        <div class="row btn-group btn-group-toggle" data-toggle="buttons">
+          <div class="col">
+            <label class="btn btn-secondary w-100">
+              <input type="radio" name="userAnswers[{{i}}]" [(ngModel)]="userAnswers[i]"  value = 0> {{ question.answers[0] }}
+            </label>
+          </div>
+          <div class="col">
+            <label class="btn btn-secondary w-100">
+              <input type="radio" name="userAnswers[{{i}}]" [(ngModel)]="userAnswers[i]"  value = 1> {{ question.answers[1] }}
+            </label>
+          </div>
+          <div class="w-100"></div>
+          <div class="col">
+            <label class="btn btn-secondary w-100">
+              <input type="radio" name="userAnswers[{{i}}]" [(ngModel)]="userAnswers[i]"  value = 2> {{ question.answers[2] }}
+            </label>
+          </div>
+          <div class="col">
+            <label class="btn btn-secondary w-100">
+              <input type="radio" name="userAnswers[{{i}}]" [(ngModel)]="userAnswers[i]"  value = 3> {{ question.answers[3] }}
+            </label>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="d-flex justify-content-center">
+      <button type="button" class="btn btn-outline-primary w-50" (click)="submitResult()">Submit</button>
+    </div>
+    
   </div>

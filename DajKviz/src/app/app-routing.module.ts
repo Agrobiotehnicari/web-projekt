@@ -22,7 +22,6 @@ const appRoutes: Routes = [
     children: [
         //{ path: '', component: AlbumsStartComponent, },
         { path: ':id', component: KvizDetailComponent, },
-        { path: ':id/igraj', component: PlayKvizComponent, },
     ]
     },
     { path: 'moji-kvizovi', component: MojiKvizoviComponent,
@@ -40,7 +39,7 @@ const appRoutes: Routes = [
         }]
     },
     { path: 'prijava', component: LoginComponent },
-    { path: 'igraj', component: PlayKvizComponent },
+    { path: 'igraj/:id', component: PlayKvizComponent },
 
 ]
 

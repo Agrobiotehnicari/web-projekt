@@ -93,7 +93,7 @@ exports.create = (req, res) => {
   resultEntry
     .save(resultEntry)
     .then((data) => {
-      return res.send(data);
+      return res.status(201).send(data._id);
     })
     .catch((err) => {
       return res.status(500).send({
