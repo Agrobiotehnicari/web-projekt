@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { KvizService } from '../kviz.service';
+import { KvizDto } from '../KvizDto.model';
 
 @Component({
   selector: 'app-moji-kvizovi',
@@ -7,9 +10,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MojiKvizoviComponent implements OnInit {
 
-  constructor() { }
+  constructor(private kvizService: KvizService) { }
+  
+  allKviz: KvizDto[];
+  subscription: Subscription;
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    this.subscription = this.kvizService.kvizChanged
+      .subscribe(
+        (allKviz: KvizDto[]) => {
+          this.allKviz = allKviz;
+        }
+      );
+    this.kvizService.getUserKviz().subscribe(kvizovi =>{
+      this.allKviz = kvizovi;
+    });
   }
 
 }

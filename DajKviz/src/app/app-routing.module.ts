@@ -17,7 +17,7 @@ const appRoutes: Routes = [
         //resolve: [KvizResolverService]
     },
     { path: 'istrazi', component: IstraziComponent },
-    { path: 'novi-kviz', component: NoviKvizComponent },
+    { path: 'novi-kviz', component: NoviKvizComponent, },
     { path: 'u-trendu', component: KvizoviUTrenduComponent,
     children: [
         //{ path: '', component: AlbumsStartComponent, },
@@ -25,8 +25,20 @@ const appRoutes: Routes = [
            // resolve: [AlbumResolverService] } },
         }]
     },
-    { path: 'moji-kvizovi', component: MojiKvizoviComponent },
-    { path: 'rijeseni-kvizovi', component: RijeseniKvizoviComponent },
+    { path: 'moji-kvizovi', component: MojiKvizoviComponent,
+    children: [
+        //{ path: '', component: AlbumsStartComponent, },
+        { path: ':id', component: KvizDetailComponent,
+           // resolve: [AlbumResolverService] } },
+        }]
+    },
+    { path: 'rijeseni-kvizovi', component: RijeseniKvizoviComponent, 
+    children: [
+        //{ path: '', component: AlbumsStartComponent, },
+        { path: ':id', component: KvizDetailComponent,
+           // resolve: [AlbumResolverService] } },
+        }]
+    },
     { path: 'prijava', component: LoginComponent },
 
 ]

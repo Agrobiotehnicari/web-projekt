@@ -27,6 +27,7 @@ route.delete("/kviz/:id", kvizController.delete);
 
 route.post("/result", resultController.create);
 route.get("/result", resultController.find);
+route.get("/result/:id", resultController.userResult);
 route.get("/result/user/:id", resultController.finbByUserId);
 route.get("/result/kviz/:id", resultController.findByKvizId);
 route.delete("/result/:id", resultController.delete);

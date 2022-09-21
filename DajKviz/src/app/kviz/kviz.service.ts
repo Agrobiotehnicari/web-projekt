@@ -14,7 +14,7 @@ export class KvizService {
     //TODO:
     //1. getKvizoviuTrendu()
 
-    kvizChanged = new Subject<Kviz[]>();
+    kvizChanged = new Subject<KvizDto[]>();
 
     // private kvizovi: Kviz[] = 
     // [
@@ -110,19 +110,7 @@ export class KvizService {
         
     }
 
-    getKvizRating(kviz: Kviz){
-        // let ratingAvg: number = 0;
-        
-        // if(kviz.ratings.length > 0){
-        //     for(let index = 0; index < kviz.ratings.length; index++){
-        //         ratingAvg = ratingAvg + kviz.ratings[index].rating;
-        //     }
-
-        //     ratingAvg = ratingAvg / kviz.ratings.length;
-        //     return Math.round(ratingAvg*10)/10;
-        // }
-        // return 'Not rated yet';
-    }
+    
 
     checkIfVoted(kviz: Kviz){
         // const userData: {
@@ -207,5 +195,24 @@ export class KvizService {
     {
         return this.http.get<KvizDto[]>(`${this.baseUrl}/kviz/trending`);
     }
+
+    getKvizById(id: string) : Observable<Kviz>{
+        return this.http.get<Kviz>(`${this.baseUrl}/kviz/${id}`);
+    }
+
+    getKvizRating(kviz: Kviz): Object{
+        let ratingAvg: number = 0;
+        
+        if(kviz.ratings.length > 0){
+            for(let index = 0; index < kviz.ratings.length; index++){
+                ratingAvg = ratingAvg + kviz.ratings[index].rating;
+            }
+
+            ratingAvg = ratingAvg / kviz.ratings.length;
+            return Math.round(ratingAvg*10)/10;
+        }
+        return 'Not rated yet';
+    }
+
 
 }

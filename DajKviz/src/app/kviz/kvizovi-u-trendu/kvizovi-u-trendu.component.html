@@ -3,7 +3,7 @@
         <app-kviz-list-expanded
         *ngFor="let kvizItem of allKviz; let i = index"
             [kviz]="kvizItem"
-            [index]="i"></app-kviz-list-expanded>
+            [index]="kvizItem.id"></app-kviz-list-expanded>
     </div>
 <div class="col kontenjer">
     <router-outlet></router-outlet>
