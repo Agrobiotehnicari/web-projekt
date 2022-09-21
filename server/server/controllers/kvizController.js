@@ -3,6 +3,7 @@ const Kvizdb = require("../models/kviz");
 const KvizDto = require("../models/KvizDto");
 const Resultdb = require("../models/result");
 const mongoose = require('mongoose');
+const Rating = require("../models/rating");
 
 // Retrieve and return all projects / retrieve and return a single project
 exports.find = (req, res) => {
@@ -94,6 +95,26 @@ exports.findUserSolved = async (req, res) => {
     ));
     return res.status(200).send(kvizovi);
    });
+}
+
+exports.userRating = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send({ message: "You are not logged in!" });
+  }
+  const kvizId = req.params.id;
+  const userId = req.user._id;
+
+  Kvizdb.findById(kvizId).select('ratings')
+    .then(data => {
+      if(!data){
+        return res.status(204);
+      }
+      else{
+        const kvizRatings = data.ratings;
+        const userRating = kvizRatings.find(rating => rating.userId === userId.toString());
+        return res.status(200).send(userRating);
+      }
+    })
 }
 
 // Create and save a new project
@@ -198,13 +219,12 @@ exports.addRating = (req, res) => {
 
   Kvizdb.findById(id).then((kviz) => {
     // Only logged in user can add rating
-    if (kviz.ratings.find((rating) => (rating.userId = req.user._id))) {
+    if (kviz.ratings.find((rating) => (rating.userId === req.user._id.toString()))) {
       return res.status(400).send({ message: "You already rated this quiz!" });
     } else {
-      kviz.ratings.push({
-        userId: req.user._id,
-        rating: req.body.rating,
-      });
+      const userRating = new Rating(req.user._id, req.body.rating);
+      kviz.ratings.push(userRating);
+      
       updateKviz(id, kviz, res);
     }
   });
@@ -218,7 +238,7 @@ function updateKviz(id, data, res) {
           .status(404)
           .send({ message: `Cannot update kviz with ${id}.` });
       } else {
-        return res.send(kviz);
+        return res.status(201).send(kviz);
       }
     })
     .catch((err) => {
