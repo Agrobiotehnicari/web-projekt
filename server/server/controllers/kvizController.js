@@ -88,7 +88,7 @@ exports.findUserSolved = async (req, res) => {
           .then(data => {
             return data});
   if(solvedKvizovi.length === 0){
-    return res.status(404).send({message: `Error finding results with user id ${id}`});
+    return res.status(204).send({message: `Error finding results with user id ${id}`});
   }
 
   const kvizIds = solvedKvizovi.map(function(el) { return mongoose.Types.ObjectId(el.kvizId) });

@@ -20,9 +20,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     // this.kvizovi = this.kvizService.getKvizovi();
+    this.getTrendingKvizovi();
     this.getUserKvizovi();
     this.getSolvedKvizovi();
-    this.getTrendingKvizovi();
   }
 
   getTrendingKvizovi(){
@@ -36,7 +36,9 @@ export class HomeComponent implements OnInit {
   getUserKvizovi(){
     this.kvizService.getUserKviz().subscribe(
       (kvizovi) => {
-        this.userKvizovi = kvizovi.slice(0,3);
+        if(kvizovi){
+          this.userKvizovi = kvizovi.slice(0,3);
+        }
       }
     );
   }
@@ -44,7 +46,10 @@ export class HomeComponent implements OnInit {
   getSolvedKvizovi(){
     this.kvizService.getUserSolvedKviz().subscribe(
       (kvizovi) => {
-        this.solvedKvizovi = kvizovi.reverse().slice(0,3);
+        if(kvizovi){
+          this.solvedKvizovi = kvizovi.reverse().slice(0,3);
+        }
+        
       }
     );
   }

@@ -13,16 +13,8 @@ export class IstraziComponent implements OnInit {
   constructor(private kvizService: KvizService) { }
   
   allKviz: KvizDto[];
-  subscription: Subscription;
 
   ngOnInit() {
-
-    this.subscription = this.kvizService.kvizChanged
-      .subscribe(
-        (allKviz: KvizDto[]) => {
-          this.allKviz = allKviz;
-        }
-      );
     this.kvizService.getAll().subscribe(kvizovi =>{
       this.allKviz = kvizovi;
     });

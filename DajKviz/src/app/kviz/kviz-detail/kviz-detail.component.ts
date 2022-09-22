@@ -47,8 +47,6 @@ export class KvizDetailComponent implements OnInit {
           })
         }
       );
-
-      // this.qa = this.kvizService.getQA(this.kviz);
   }
 
   onAddRating(rating: number){
@@ -58,12 +56,6 @@ export class KvizDetailComponent implements OnInit {
         this.userRating = rating;
       })
     });
-  }
-
-  onAddQA(kviz: Kviz, text: string, form: NgForm){
-    this.kvizService.addQA(kviz, text);
-
-    form.reset();
   }
 
 }
