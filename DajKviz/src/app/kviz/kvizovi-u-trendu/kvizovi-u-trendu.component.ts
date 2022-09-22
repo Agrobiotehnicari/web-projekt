@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Kviz } from '../kviz.model';
 import { KvizService } from '../kviz.service';
+import { KvizDto } from '../KvizDto.model';
 
 @Component({
   selector: 'app-kvizovi-u-trendu',
@@ -12,18 +13,20 @@ export class KvizoviUTrenduComponent implements OnInit {
 
   constructor(private kvizService: KvizService) { }
   
-  allKviz: Kviz[];
+  allKviz: KvizDto[];
   subscription: Subscription;
 
   ngOnInit() {
 
     this.subscription = this.kvizService.kvizChanged
       .subscribe(
-        (allKviz: Kviz[]) => {
+        (allKviz: KvizDto[]) => {
           this.allKviz = allKviz;
         }
       );
-    // this.allKviz = this.kvizService.getSortedKviz();
+    this.kvizService.getTrendingKvizovi().subscribe(kvizovi =>{
+      this.allKviz = kvizovi;
+    });
   }
 
 }

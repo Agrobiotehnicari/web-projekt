@@ -20,6 +20,7 @@ route.post("/kviz/:id/rating", kvizController.addRating);
 route.get("/kviz", kvizController.find);
 route.get("/kviz/trending", kvizController.getTrendingKviz);
 route.get("/kviz/:id", kvizController.findById);
+route.get("/kviz/:id/rating", kvizController.userRating);
 route.get("/kviz/user/:id", kvizController.findByUserId);
 route.get("/kviz/user/:id/solved", kvizController.findUserSolved);
 route.put("/kviz/:id", kvizController.update);
@@ -27,6 +28,7 @@ route.delete("/kviz/:id", kvizController.delete);
 
 route.post("/result", resultController.create);
 route.get("/result", resultController.find);
+route.get("/result/:id", resultController.userResult);
 route.get("/result/user/:id", resultController.finbByUserId);
 route.get("/result/kviz/:id", resultController.findByKvizId);
 route.delete("/result/:id", resultController.delete);

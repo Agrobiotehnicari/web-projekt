@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { Kviz } from '../kviz.model';
 import { KvizService } from '../kviz.service';
 import { QA } from '../QA.model';
+import { Result } from '../result.model';
+import { ResultService } from '../result.service';
 
 @Component({
   selector: 'app-kviz-detail',
@@ -13,31 +16,48 @@ import { QA } from '../QA.model';
 export class KvizDetailComponent implements OnInit {
 
   kviz: Kviz;
-  id: number;
+  id: string;
   isRated = false;
   qa: QA[];
   text: string;
+  result: Result;
+  ratings: Object;
+  userRating: Object;
 
   constructor(public kvizService: KvizService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute, private resultService: ResultService) { }
 
   ngOnInit() {
 
     this.route.params
       .subscribe(
         (params: Params) => {
-          this.id = +params['id'];
-          // this.kviz = this.kvizService.getOneSortedKviz(this.id);
-          this.isRated = this.kvizService.checkIfVoted(this.kviz);
+          this.id = params['id'];
+          const kvizId = params['id'];
+          this.resultService.getUserResult(kvizId).subscribe(result => {
+            this.result = result;
+          })
+          this.kvizService.getKvizById(kvizId).subscribe(kviz => {
+            this.kviz = kviz;
+            this.ratings = this.kvizService.getKvizRating(kviz)
+            
+          });
+          this.kvizService.getUserRating(kvizId).subscribe(rating => {
+            this.userRating = rating;
+          })
         }
       );
 
       // this.qa = this.kvizService.getQA(this.kviz);
   }
 
-  onAddRating(kviz: Kviz, rating: number){
-    this.kvizService.addRating(kviz, rating);
-    this.isRated = this.kvizService.checkIfVoted(kviz);
+  onAddRating(rating: number){
+    this.kvizService.addRating(this.id, rating).subscribe(kviz => {
+      this.ratings = this.kvizService.getKvizRating(kviz);
+      this.kvizService.getUserRating(this.id).subscribe(rating => {
+        this.userRating = rating;
+      })
+    });
   }
 
   onAddQA(kviz: Kviz, text: string, form: NgForm){

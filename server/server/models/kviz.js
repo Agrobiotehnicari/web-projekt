@@ -30,7 +30,7 @@ const kvizSchema = new mongoose.Schema({
   ratings: [
     {
       userId: {
-        type: Number,
+        type: String,
         required: true,
       },
       rating: {

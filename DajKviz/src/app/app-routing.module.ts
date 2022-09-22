@@ -16,19 +16,34 @@ const appRoutes: Routes = [
     { path: 'home', component: HomeComponent,
         canActivate: [AuthGuard],
     },
-    { path: 'istrazi', component: IstraziComponent },
-    { path: 'novi-kviz', component: NoviKvizComponent },
-    { path: 'u-trendu', component: KvizoviUTrenduComponent,
+    { path: 'istrazi', component: IstraziComponent ,
+    canActivate: [AuthGuard],
     children: [
-        //{ path: '', component: AlbumsStartComponent, },
         { path: ':id', component: KvizDetailComponent, },
-        { path: ':id/igraj', component: PlayKvizComponent, },
+    ]},
+    { path: 'novi-kviz', component: NoviKvizComponent, 
+    canActivate: [AuthGuard],},
+    { path: 'u-trendu', component: KvizoviUTrenduComponent,
+    canActivate: [AuthGuard],
+    children: [
+        { path: ':id', component: KvizDetailComponent, },
     ]
     },
-    { path: 'moji-kvizovi', component: MojiKvizoviComponent },
-    { path: 'rijeseni-kvizovi', component: RijeseniKvizoviComponent },
+    { path: 'moji-kvizovi', component: MojiKvizoviComponent,
+    canActivate: [AuthGuard],
+    children: [
+        { path: ':id', component: KvizDetailComponent,
+        }]
+    },
+    { path: 'rijeseni-kvizovi', component: RijeseniKvizoviComponent, 
+    canActivate: [AuthGuard],
+    children: [
+        { path: ':id', component: KvizDetailComponent,
+        }]
+    },
     { path: 'prijava', component: LoginComponent },
-    { path: 'igraj', component: PlayKvizComponent },
+    { path: 'igraj/:id', component: PlayKvizComponent ,
+    canActivate: [AuthGuard],},
 
 ]
 

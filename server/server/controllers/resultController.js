@@ -1,5 +1,6 @@
 var Resultdb = require("../models/result");
 var CreateResultDto = require("../models/CreateResultDto.js");
+const ResultDto = require("../models/ResultDto");
 // Retrieve and return all projects / retrieve and return a single project
 exports.find = (req, res) => {
   if (!req.isAuthenticated()) {
@@ -92,7 +93,7 @@ exports.create = (req, res) => {
   resultEntry
     .save(resultEntry)
     .then((data) => {
-      return res.send(data);
+      return res.status(201).send(data._id);
     })
     .catch((err) => {
       return res.status(500).send({
@@ -100,6 +101,39 @@ exports.create = (req, res) => {
       });
     });
 };
+
+exports.userResult = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send({ message: "You are not logged in!" });
+  }
+
+  // validate request
+  if (!req.body) {
+    return res.status(400).send({ message: "Content can not be empty!" });
+  }
+
+  const reqInfo = {
+    userId: req.user._id,
+    kvizId: req.params.id
+  };
+
+  Resultdb.findOne({userId: reqInfo.userId, kvizId: reqInfo.kvizId})
+    .then(data => {
+      if (!data) {
+        return res.status(204).send({
+          message: `Result with userId ${reqInfo.userId} and kvizId ${reqInfo.kvizId} not found!`,
+        });
+      } else {
+        const resultDto = new ResultDto(data.result.correctAnswers, data.result.questions);
+        return res.status(200).json(resultDto);
+      }
+    })
+    .catch((err) => {
+      return res
+        .status(500)
+        .send({ message: `Error retrieving result with userId ${reqInfo.userId} and kvizId ${reqInfo.kvizId}` });
+    })
+}
 
 function deleteResult(id, res) {
   Resultdb.findByIdAndDelete(id)
