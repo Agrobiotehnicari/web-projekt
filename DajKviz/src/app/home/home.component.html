@@ -15,10 +15,13 @@
                                     style="pointer-events: none; color: black"
                                     >Kvizovi u trendu</h3>
                         <hr>
-                        <app-kviz-item 
-                        *ngFor="let kvizItem of trendingKvizovi; let i = index"
-                        [kviz]="kvizItem"
-                        [index]="i"></app-kviz-item>
+                        <div class="row" style="margin-left: 20px;">
+                            <app-kviz-item  style="width: fit-content;"
+                            *ngFor="let kvizItem of trendingKvizovi; let i = index"
+                            [kviz]="kvizItem"
+                            [index]="i"></app-kviz-item>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -44,16 +47,20 @@
                                     style="pointer-events: none; color: black"
                                     >Moji kvizovi</h3>
                                 <hr>
-                                <ng-template [ngIf]="userKvizovi?.length > 0" [ngIfElse]="userHasNoKvizovi">
-                                    <app-kviz-item 
-                                    *ngFor="let kvizItem of userKvizovi; let i = index"
-                                    [kviz]="kvizItem"
-                                    [index]="i"></app-kviz-item>
-                                </ng-template>
-                                  
-                                <ng-template #userHasNoKvizovi>
-                                    <p style="text-decoration: none; color: black;">Niste napravili niti jedan kviz.</p>
-                                </ng-template>
+
+                                <div class="row" style="margin-left: 20px;">
+                                    <ng-template [ngIf]="userKvizovi?.length > 0" [ngIfElse]="userHasNoKvizovi">
+                                        <app-kviz-item 
+                                        *ngFor="let kvizItem of userKvizovi; let i = index"
+                                        [kviz]="kvizItem"
+                                        [index]="i"></app-kviz-item>
+                                    </ng-template>
+                                      
+                                    <ng-template #userHasNoKvizovi>
+                                        <p style="text-decoration: none; color: black;">Niste napravili niti jedan kviz.</p>
+                                    </ng-template>
+                                </div>
+                                
                                 
                             </div>
                         </div>
@@ -80,16 +87,19 @@
                                     style="pointer-events: none; color: black"
                                     >Rijeseni kvizovi</h3>
                             <hr>
-                            <ng-template [ngIf]="solvedKvizovi?.length > 0" [ngIfElse]="noSolved">
-                                <app-kviz-item 
-                                    *ngFor="let kvizItem of solvedKvizovi; let i = index"
-                                    [kviz]="kvizItem"
-                                    [index]="i"></app-kviz-item>
-                            </ng-template>
-                              
-                            <ng-template #noSolved>
-                                <p style="text-decoration: none; color: black;">Niste riješili niti jedan kviz.</p>
-                            </ng-template>
+                            <div class="row" style="margin-left: 20px;">
+                                <ng-template [ngIf]="solvedKvizovi?.length > 0" [ngIfElse]="noSolved">
+                                    <app-kviz-item 
+                                        *ngFor="let kvizItem of solvedKvizovi; let i = index"
+                                        [kviz]="kvizItem"
+                                        [index]="i"></app-kviz-item>
+                                </ng-template>
+                                  
+                                <ng-template #noSolved>
+                                    <p style="text-decoration: none; color: black;">Niste riješili niti jedan kviz.</p>
+                                </ng-template>
+                            </div>
+                           
                             
                         </div>
                     </div>

@@ -1,11 +1,11 @@
 <div class="row">
-    <div class="col kontenjer" style="margin-bottom: 70px; margin-left: 10px;">
+    <div class="col kontenjer1" style="margin-bottom: 70px; margin-left: 10px;">
         <app-kviz-list-expanded
         *ngFor="let kvizItem of allKviz; let i = index"
             [kviz]="kvizItem"
             [index]="kvizItem.id"></app-kviz-list-expanded>
     </div>
-<div class="col kontenjer">
+<div class="col kontenjer2">
     <router-outlet></router-outlet>
 </div>
 </div>
