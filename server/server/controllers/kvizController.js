@@ -12,8 +12,11 @@ exports.find = (req, res) => {
   }
 
   Kvizdb.find()
-    .then((kviz) => {
-      return res.json(kviz);
+    .then((data) => {
+      const kvizovi = data.map(kviz => new KvizDto(
+        kviz._id, kviz.name, kviz.creator.username, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
+      ));
+      return res.status(200).send(kvizovi);
     })
     .catch((err) => {
       return res.status(500).send({
@@ -63,7 +66,7 @@ exports.findByUserId = (req, res) => {
       } else {
 
         const kvizovi = data.map(kviz => new KvizDto(
-          kviz._id, kviz.name, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
+          kviz._id, kviz.name, kviz.creator.username, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
         ));
         return res.status(200).send(kvizovi);
       }
@@ -91,7 +94,7 @@ exports.findUserSolved = async (req, res) => {
   const kvizIds = solvedKvizovi.map(function(el) { return mongoose.Types.ObjectId(el.kvizId) });
   Kvizdb.find({"_id" : {"$in" : kvizIds}}).then(data => {
     const kvizovi = data.map(kviz => new KvizDto(
-      kviz._id, kviz.name, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
+      kviz._id, kviz.name, kviz.creator.username, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
     ));
     return res.status(200).send(kvizovi);
    });
@@ -104,10 +107,11 @@ exports.userRating = (req, res) => {
   const kvizId = req.params.id;
   const userId = req.user._id;
 
+  console.log(kvizId);
   Kvizdb.findById(kvizId).select('ratings')
     .then(data => {
       if(!data){
-        return res.status(204);
+        return res.status(204).send();
       }
       else{
         const kvizRatings = data.ratings;
@@ -197,7 +201,7 @@ exports.getTrendingKviz = (req, res) => {
     } else {
 
       const kvizovi = data.map(kviz => new KvizDto(
-        kviz._id, kviz.name, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
+        kviz._id, kviz.name, kviz.creator.username, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
       ));
       return res.status(200).send(kvizovi);
     }
@@ -218,6 +222,9 @@ exports.addRating = (req, res) => {
   const id = req.params.id;
 
   Kvizdb.findById(id).then((kviz) => {
+    if(!kviz){
+      return res.status(404).send({message: 'Cant find kviz with given id!'});
+    }
     // Only logged in user can add rating
     if (kviz.ratings.find((rating) => (rating.userId === req.user._id.toString()))) {
       return res.status(400).send({ message: "You already rated this quiz!" });

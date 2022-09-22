@@ -161,8 +161,8 @@ export class KvizService {
         //                 console.log(response));
     }
 
-    addRating(kviz: Kviz, rating: number){
-        console.log("Added Rating");
+    addRating(kvizId: string, rating: number): Observable<Kviz>{
+        return this.http.post<Kviz>(`${this.baseUrl}/kviz/${kvizId}/rating`, {rating: rating});
     }
 
     addNewQuestion()
@@ -177,6 +177,11 @@ export class KvizService {
     addKviz(kviz: CreateKviz): Observable<Object>
     {
         return this.http.post<Object>(`${this.baseUrl}/kviz`, kviz)
+    }
+
+    getAll(): Observable<KvizDto[]>
+    {
+        return this.http.get<KvizDto[]>(`${this.baseUrl}/kviz`);
     }
 
     getUserKviz(): Observable<KvizDto[]>
@@ -214,5 +219,8 @@ export class KvizService {
         return 'Not rated yet';
     }
 
+    getUserRating(kvizId: string): Observable<Kviz>{
+        return this.http.get<Kviz>(`${this.baseUrl}/kviz/${kvizId}/rating`);
+    }
 
 }

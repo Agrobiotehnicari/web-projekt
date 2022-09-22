@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { KvizService } from '../kviz/kviz.service';
+import { KvizDto } from '../kviz/KvizDto.model';
 
 @Component({
   selector: 'app-istrazi',
@@ -7,9 +10,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IstraziComponent implements OnInit {
 
-  constructor() { }
+  constructor(private kvizService: KvizService) { }
+  
+  allKviz: KvizDto[];
+  subscription: Subscription;
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    this.subscription = this.kvizService.kvizChanged
+      .subscribe(
+        (allKviz: KvizDto[]) => {
+          this.allKviz = allKviz;
+        }
+      );
+    this.kvizService.getAll().subscribe(kvizovi =>{
+      this.allKviz = kvizovi;
+    });
   }
+
 
 }

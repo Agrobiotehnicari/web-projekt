@@ -21,12 +21,12 @@
           <a style="margin-right: 10px;"></a> 
 
           <p style="display:inline; margin-left: 70px; color: gray;" class="font-weight-light" *ngIf="kviz?.ratings.length > 0">
-            Rated by {{ kviz.ratings.length }} {{ kviz.ratings.length == 1 ? 'user' : 'users'}} 
+            {{ kviz.ratings.length }} {{ kviz.ratings.length == 1 ? 'Ocjena' : 'Ocjene'}}  
           </p>
           <h6>{{ kviz?.creator.username }}</h6>
           
           <p class="mb-0 font-weight-light" style="text-align: justify; margin-right: 20px;">{{ kviz?.description }}</p>
-          <p style="display:inline;" >Released on: {{ kviz?.created_at | date: 'mediumDate'}}</p>
+          <p style="display:inline;" >Napravljeno: {{ kviz?.created_at | date: 'mediumDate'}}</p>
           <hr>
         </div>
       </div>
@@ -41,20 +41,52 @@
               line-height: 1.75rem;
             "
             >
-              <span>Play</span>
+              <span>Igraj</span>
             </button>
           </div>
         </ng-template>
         
         <ng-template #hasResult>
-          <div class="text-center">
-              <h3 >Result</h3>
-              <p style="
-              font-size: 1.25rem;
-              line-height: 1.75rem;
-            ">{{ result.correctAnswers }} / {{ result.questions }}</p>
+          <div>
+            <div>
+              <div class="text-center">
+                <h3 >Rezultat</h3>
+                <p style="
+                font-size: 1.25rem;
+                line-height: 1.75rem;
+              ">{{ result.correctAnswers }} / {{ result.questions }}</p>
+            </div>
+
+              <ng-template [ngIf]="userRating" [ngIfElse]="notRated">
+                Ocjenili ste ovaj kviz s ocjenom {{ userRating.rating }}
+                 
+              </ng-template>
               
+              <ng-template #notRated>
+                <div class="d-flex flex-column row justify-content-center">
+                  <div class="text-center">
+                    <h3> Ocijeni kviz </h3>
+                  </div>
+                  <div>
+                    <button class="votingDugme btn card-text btn-light btn-lg" (click)="onAddRating(1)">1</button> 
+                    <a style="margin-right: 5px;"></a> 
+                    <button class="votingDugme btn card-text btn-light btn-lg" (click)="onAddRating(2)">2</button> 
+                    <a style="margin-right: 5px;"></a>
+                    <button class="votingDugme btn card-text btn-light btn-lg" (click)="onAddRating(3)">3</button> 
+                    <a style="margin-right: 5px;"></a>
+                    <button class="votingDugme btn card-text btn-light btn-lg" (click)="onAddRating(4)">4</button> 
+                    <a style="margin-right: 5px;"></a>
+                    <button class="votingDugme btn card-text btn-light btn-lg" (click)="onAddRating(5)">5</button>
+                  </div>
+                  
+              </div>
+        
+              </ng-template>
+            </div>
+            
+            
           </div>
+          
         </ng-template>
       </div>
   </div>

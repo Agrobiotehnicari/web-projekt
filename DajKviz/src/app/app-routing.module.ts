@@ -16,30 +16,34 @@ const appRoutes: Routes = [
     { path: 'home', component: HomeComponent,
         canActivate: [AuthGuard],
     },
-    { path: 'istrazi', component: IstraziComponent },
-    { path: 'novi-kviz', component: NoviKvizComponent, },
-    { path: 'u-trendu', component: KvizoviUTrenduComponent,
+    { path: 'istrazi', component: IstraziComponent ,
+    canActivate: [AuthGuard],
     children: [
-        //{ path: '', component: AlbumsStartComponent, },
+        { path: ':id', component: KvizDetailComponent, },
+    ]},
+    { path: 'novi-kviz', component: NoviKvizComponent, 
+    canActivate: [AuthGuard],},
+    { path: 'u-trendu', component: KvizoviUTrenduComponent,
+    canActivate: [AuthGuard],
+    children: [
         { path: ':id', component: KvizDetailComponent, },
     ]
     },
     { path: 'moji-kvizovi', component: MojiKvizoviComponent,
+    canActivate: [AuthGuard],
     children: [
-        //{ path: '', component: AlbumsStartComponent, },
         { path: ':id', component: KvizDetailComponent,
-           // resolve: [AlbumResolverService] } },
         }]
     },
     { path: 'rijeseni-kvizovi', component: RijeseniKvizoviComponent, 
+    canActivate: [AuthGuard],
     children: [
-        //{ path: '', component: AlbumsStartComponent, },
         { path: ':id', component: KvizDetailComponent,
-           // resolve: [AlbumResolverService] } },
         }]
     },
     { path: 'prijava', component: LoginComponent },
-    { path: 'igraj/:id', component: PlayKvizComponent },
+    { path: 'igraj/:id', component: PlayKvizComponent ,
+    canActivate: [AuthGuard],},
 
 ]
 

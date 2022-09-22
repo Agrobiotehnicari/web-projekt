@@ -22,6 +22,7 @@ export class KvizDetailComponent implements OnInit {
   text: string;
   result: Result;
   ratings: Object;
+  userRating: Object;
 
   constructor(public kvizService: KvizService,
               private route: ActivatedRoute, private resultService: ResultService) { }
@@ -36,31 +37,33 @@ export class KvizDetailComponent implements OnInit {
           this.resultService.getUserResult(kvizId).subscribe(result => {
             this.result = result;
           })
-          this.kvizService.getKvizById(this.id).subscribe(kviz => {
+          this.kvizService.getKvizById(kvizId).subscribe(kviz => {
             this.kviz = kviz;
             this.ratings = this.kvizService.getKvizRating(kviz)
-            this.isRated = this.kvizService.checkIfVoted(kviz);
+            
           });
-          
+          this.kvizService.getUserRating(kvizId).subscribe(rating => {
+            this.userRating = rating;
+          })
         }
       );
 
       // this.qa = this.kvizService.getQA(this.kviz);
   }
 
-  onAddRating(kviz: Kviz, rating: number){
-    this.kvizService.addRating(kviz, rating);
-    this.isRated = this.kvizService.checkIfVoted(kviz);
+  onAddRating(rating: number){
+    this.kvizService.addRating(this.id, rating).subscribe(kviz => {
+      this.ratings = this.kvizService.getKvizRating(kviz);
+      this.kvizService.getUserRating(this.id).subscribe(rating => {
+        this.userRating = rating;
+      })
+    });
   }
 
   onAddQA(kviz: Kviz, text: string, form: NgForm){
     this.kvizService.addQA(kviz, text);
 
     form.reset();
-  }
-
-  formatDate(date: Date){
-
   }
 
 }
