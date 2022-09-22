@@ -26,7 +26,6 @@ export class PlayKvizComponent implements OnInit {
     })
 
   }
-
   submitResult(){
     if(confirm('Are you sure you want to submit your answers?') === true){
       console.log(this.userAnswers)
