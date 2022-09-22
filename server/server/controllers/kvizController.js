@@ -193,13 +193,32 @@ exports.getTrendingKviz = (req, res) => {
     return res.status(401).send("You are not logged in");
   }
 
-  Kvizdb.find().sort({ratings : -1}).then((data) => {
+  Kvizdb.find().then((data) => {
     if (!data) {
-      return res.status(404).send({
+      return res.status(204).send({
         message: `No kvizes have been rated`,
       });
     } else {
+      data = data.sort(function(x,y) {
+        const sumX = x.ratings.reduce(
+          (previousValue, currentValue) => previousValue + currentValue.rating,
+          0
+        );
+        let ratioX = 0;
+        if(x.ratings.length){
+          ratioX = sumX / x.ratings.length;
+        }
 
+        const sumY = y.ratings.reduce(
+          (previousValue, currentValue) => previousValue + currentValue.rating,
+          0
+        );
+        let ratioY = 0;
+        if(y.ratings.length){
+          ratioY = sumY / y.ratings.length;
+        }
+        return ratioY - ratioX;
+      })
       const kvizovi = data.map(kviz => new KvizDto(
         kviz._id, kviz.name, kviz.creator.username, kviz.imagePath, kviz.description, kviz.ratings, kviz.created_at
       ));
